@@ -1,0 +1,470 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent</title>
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css'>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="{%static 'css/chat.css' %}" rel="stylesheet" />
+</head>
+
+<body>
+    <main class="content">
+        <div class="container p-0">
+            <div class="card">
+                <div class="row g-0">
+                    <div class="col-12 col-lg-5 col-xl-3 border-right">
+                        <div class="px-4 mt-3 mb-2 d-none d-md-block">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1">
+                                    <a href="/chat/m1"><button class="btn btn-sm btn-dark"><i
+                                                class="bi bi-chat-left-dots"></i> New Chat</button></a>
+
+                                    <button type="button" class="btn btn-sm btn-warning" data-toggle="modal"
+                                        data-target="#AddToolModalCenter">
+                                        Edit tools
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Add Tool Modal -->
+                        <div class="modal fade" id="AddToolModalCenter" tabindex="-1" role="dialog"
+                            aria-labelledby="AddToolModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="AddToolModalLongTitle">Modal title</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="/modify/tools" method="post">
+                                            {%csrf_token%}
+                                            <div class="form-group">
+                                                <label for="category">Select Operation:</label>
+                                                <select class="form-control" id="operation" name = "operation"
+                                                    onchange="handleCategoryChange()">
+                                                    <option value="add">Add Tool</option>
+                                                    <option value="update">Update Tool</option>
+                                                    <option value="delete">Delete Tool</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="title">Tool Name:</label>
+                                                <input type="text" class="form-control" id="title" name = 'tool_name'
+                                                    placeholder="Enter tool name ">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="description" id="descriptionlabel">Description:</label>
+                                                <textarea class="form-control" id="description" rows="3" name="description"
+                                                    placeholder="Enter description"></textarea>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="argumentDescriptions" id="argumentDescriptionslabel">Arguments:</label>
+                                                <textarea class="form-control" id="argumentDescriptions" rows="3" name = "arguments"
+                                                    placeholder="Enter argument descriptions"></textarea>
+                                            </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                                        <button type="button" class="btn btn-sm btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="previous-chat">
+                            <a href="#" class="list-group-item list-group-item-action border-0">
+
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-chat-text text-warning" style="font-size: xx-large;"></i>
+                                    <div class="flex-grow-1 ml-3">
+                                        AI agent methods
+                                        <div class="small"><span class="bi bi-circle-fill text-success "></span>
+                                            28-12-2023 </div>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <a href="#" class="list-group-item list-group-item-action border-0">
+
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-chat-text text-warning" style="font-size: xx-large;"></i>
+                                    <div class="flex-grow-1 ml-3">
+                                        Machine learning algorithms
+                                        <div class="small"><span class="bi bi-circle-fill text-success "></span>
+                                            28-12-2023 </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action border-0">
+
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-chat-text text-warning" style="font-size: xx-large;"></i>
+                                    <div class="flex-grow-1 ml-3">
+                                        Http methods available
+                                        <div class="small"><span class="bi bi-circle-fill text-success "></span>
+                                            28-12-2023 </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action border-0">
+
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-chat-text text-warning" style="font-size: xx-large;"></i>
+                                    <div class="flex-grow-1 ml-3">
+                                        API Documentation
+                                        <div class="small"><span class="bi bi-circle-fill text-success "></span>
+                                            28-12-2023 </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action border-0">
+
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-chat-text text-warning" style="font-size: xx-large;"></i>
+                                    <div class="flex-grow-1 ml-3">
+                                        Javascript functions
+                                        <div class="small"><span class="bi bi-circle-fill text-success "></span>
+                                            28-12-2023 </div>
+                                    </div>
+                                </div>
+                            </a>
+
+                        </div>
+
+                        <hr class="d-block d-lg-none mt-1 mb-0">
+                    </div>
+                    <div class="col-12 col-lg-7 col-xl-9">
+                        <div class="py-2 px-4 border-bottom d-none d-lg-block">
+                            <div class="d-flex align-items-center py-1">
+
+                                <div class="flex-grow-1 pl-3">
+                                    <select class="custom-select w-25" id="model">
+                                        <option value="gpt-3.5">gpt-3.5-Single-turn</option>
+                                        <option value="claude">Claude</option>
+                                        <option value="zephyr">Zephyr</option>
+                                        <option value="multi-turn">Multi-turn-model</option>
+                                        <!-- Add more options as needed -->
+                                    </select>
+                                </div>
+                                <div>
+                                    <!-- <h6 class="text-secondary" id="timer">Timer: 00:00:00</h6> -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="position-relative">
+                            <div class="chat-messages p-4" id="chat-messages">
+
+                                <div class="chat-message-left pb-4">
+                                    <div>
+                                        <i class="bi bi-robot text-success" style="font-size:xx-large;"></i>
+                                        <div class="text-muted small text-nowrap mt-2">Now</div>
+                                    </div>
+                                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                                        <div class="font-weight-bold mb-1 text-success">Agent</div>
+                                        How may I help you today?
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="flex-grow-0 py-3 px-4 border-top">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="message-input"
+                                    placeholder="Type your message">
+                                <button class="btn btn-primary ml-2" id="send-button">Send</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const chatMessages = document.getElementById('chat-messages');
+        // const timerElement = document.getElementById('timer');
+
+        // Start the timer when the page loads
+        let timerSeconds = 0;
+        let timerInterval;
+        // startTimer()
+        // Handle button click
+        sendButton.addEventListener('click', sendMessage);
+
+        // Handle Enter key press
+        messageInput.addEventListener('keyup', function (event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const userMessage = messageInput.value.trim();
+
+            if (userMessage !== '') {
+                console.log(userMessage);
+                appendMessage('chat-message-right mb-4', userMessage);
+                const chatMessagesContent = chatMessages.innerHTML;
+
+
+                displayTypingIndicator();
+
+                // // Make API call to Django app
+                var model = document.getElementById('model')
+                var modelValue = model.value;
+                if (modelValue==='multi-turn'){
+
+                    fetch('/ask_agent/m1', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            message: chatMessagesContent,
+                            model: document.getElementById('model').value
+                        }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            // Handle the response from the Django app
+                            hideTypingIndicator();
+                            timerSeconds = 0;
+                            console.log(data);
+                            const botMessage = data.botResponse; // Replace 'botResponse' with the actual key in your response
+                            appendAgentMessage('chat-message-left pb-4', botMessage);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            hideTypingIndicator(); // Hide typing indicator in case of an error
+                            timerSeconds = 0;
+                        });
+                }
+                else {
+                     fetch('/ask_agent/m1', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            message: userMessage,
+                            model: document.getElementById('model').value
+                        }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            // Handle the response from the Django app
+                            hideTypingIndicator();
+                            timerSeconds = 0;
+                            console.log(data);
+                            const botMessage = data.botResponse; // Replace 'botResponse' with the actual key in your response
+                            appendAgentMessage('chat-message-left pb-4', botMessage);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            hideTypingIndicator(); // Hide typing indicator in case of an error
+                            timerSeconds = 0;
+                        });
+                }
+
+                // setTimeout(function () {
+                //     const botMessage = "This is a sample bot response.";
+                //      hideTypingIndicator();
+                //      timerSeconds = 0;
+                //     appendAgentMessage('chat-message-left pb-4', botMessage);
+                // }, 2000);
+
+                // Clear the input field
+                messageInput.value = '';
+            }
+        };
+
+        function appendMessage(msg_class, message) {
+            console.log(msg_class, message);
+            const messageElement = document.createElement('div');
+            messageElement.className = msg_class;
+            // Get the current time
+            const currentTime = new Date();
+            const hours = currentTime.getHours();
+            const minutes = currentTime.getMinutes();
+            const ampm = hours >= 12 ? 'pm' : 'am';
+
+            // Convert hours to 12-hour format
+            const formattedHours = hours % 12 || 12;
+            const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+            console.log(msg_class, message);
+            inner_html = `
+                        <div>
+                            <i class="bi bi-person-circle text-warning" style="font-size:xx-large;"></i>
+                            <div class="text-muted small text-nowrap mt-2">${formattedHours}:${formattedMinutes} ${ampm}</div>
+                        </div>
+                        <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3 overflow-hidden" style="word-wrap: break-word;">
+                            <div class="font-weight-bold mb-1 text-warning">You</div>
+                            <div class='client-msg'>${message}</div>
+                        </div>`;
+            messageElement.innerHTML = inner_html;
+            // console.log(messageElement);
+            console.log(chatMessages);
+            chatMessages.appendChild(messageElement);
+            console.log(chatMessages);
+
+            // // Scroll to the bottom of the chat messages
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function appendAgentMessage(msg_class, message, isTypingIndicator = false) {
+            const messageElement = document.createElement('div');
+            messageElement.className = msg_class;
+
+            if (isTypingIndicator) {
+                messageElement.classList.add('agent-typing-indicator');
+                startTimer();
+            }
+
+            // Get the current time
+            const currentTime = new Date();
+            const hours = currentTime.getHours();
+            const minutes = currentTime.getMinutes();
+            const ampm = hours >= 12 ? 'pm' : 'am';
+
+            // Convert hours to 12-hour format
+            const formattedHours = hours % 12 || 12;
+            const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+            console.log(msg_class, message);
+            inner_html = `
+                <div> 
+                    <i class="${isTypingIndicator ? 'bi bi-three-dots' : 'bi bi-robot'} text-success" style="font-size:xx-large;"></i>
+                    <div class="text-muted small text-nowrap mt-2">${formattedHours}:${formattedMinutes} ${ampm}</div>
+                </div>
+                <div class="flex-shrink-1 bg-light rounded py-2 px-3 ${isTypingIndicator ? 'ml-3' : 'mr-3'} overflow-hidden" style="word-wrap: break-word;">
+                    <div class="font-weight-bold mb-1 text-success">${isTypingIndicator ? 'Agent is thinking...' : 'Agent'}</div>
+                    ${isTypingIndicator ? '<p class="text-secondary" id="timer">Timer: 00:00:00</p>' : `
+                        <button class="btn btn-danger btn-sm top-0 end-0 mb-2 me-2" id='copy' onclick="copyToClipboard(this)">copy</button>
+                        <pre class="text-white bg-dark p-3 rounded"><code>${message}</code></pre>
+                    
+                    `}
+                </div>`;
+
+            messageElement.innerHTML = inner_html;
+            chatMessages.appendChild(messageElement);
+
+            // Scroll to the bottom of the chat messages
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function displayTypingIndicator() {
+            const typingMessage = "Agent is typing...";
+            appendAgentMessage('chat-message-left pb-4', typingMessage, true);
+        }
+
+
+
+        function startTimer() {
+            if (!timerInterval) {
+                timerInterval = setInterval(function () {
+                    timerSeconds++;
+                    updateTimerDisplay();
+                }, 1000);
+            }
+        }
+
+        function updateTimerDisplay() {
+            const hours = Math.floor(timerSeconds / 3600);
+            const minutes = Math.floor((timerSeconds % 3600) / 60);
+            const seconds = timerSeconds % 60;
+            const formattedTime = `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
+            const timerElement = document.getElementById('timer');
+
+            if (timerElement) {
+                timerElement.textContent = `Timer: ${formattedTime}`;
+            }
+        }
+
+        function hideTypingIndicator() {
+            const typingMessageElement = document.querySelector('.agent-typing-indicator');
+            if (typingMessageElement) {
+                typingMessageElement.remove();
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+        function padZero(num) {
+            return num < 10 ? `0${num}` : num;
+        }
+
+
+        function copyToClipboard(button) {
+            const codeElement = button.parentElement.querySelector('code');
+            const textToCopy = codeElement.innerText;
+
+            const textArea = document.createElement('textarea');
+            textArea.value = textToCopy;
+            document.body.appendChild(textArea);
+
+            textArea.select();
+            document.execCommand('copy');
+
+            document.body.removeChild(textArea);
+            var text = document.getElementById('copy');
+            text.innerText = 'copied to clipboard';
+
+            text.classList.remove('btn-danger');
+            text.classList.add('btn-outline-danger');
+
+        }
+
+        function handleCategoryChange() {
+            var categoryDropdown = document.getElementById("operation");
+            var descriptionTextarea = document.getElementById("description");
+            var descriptionlabelTextarea = document.getElementById("descriptionlabel");
+            var argumentDescriptionsTextarea = document.getElementById("argumentDescriptions");
+            var argumentDescriptionslabelTextarea = document.getElementById("argumentDescriptionslabel");
+
+            if (categoryDropdown.value === "delete") {
+                // Hide textareas if the selected category is "delete"
+                descriptionTextarea.style.display = "none";
+                descriptionlabelTextarea.style.display = "none";
+                argumentDescriptionsTextarea.style.display = "none";
+                argumentDescriptionslabelTextarea.style.display = "none";
+            } else {
+                // Show textareas for other categories
+                descriptionTextarea.style.display = "block";
+                descriptionlabelTextarea.style.display = "block";
+                argumentDescriptionsTextarea.style.display = "block";
+                argumentDescriptionslabelTextarea.style.display = "block";
+            }
+        }
+
+
+    </script>
+    <script src='https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js'></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
